@@ -1,0 +1,12 @@
+D:\Mashup\DatabaseHelper\bin\Debug\net8.0\DatabaseHelper.deps.json
+D:\Mashup\DatabaseHelper\bin\Debug\net8.0\DatabaseHelper.dll
+D:\Mashup\DatabaseHelper\bin\Debug\net8.0\DatabaseHelper.pdb
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\DatabaseHelper.csproj.AssemblyReference.cache
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\DatabaseHelper.GeneratedMSBuildEditorConfig.editorconfig
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\DatabaseHelper.AssemblyInfoInputs.cache
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\DatabaseHelper.AssemblyInfo.cs
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\DatabaseHelper.csproj.CoreCompileInputs.cache
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\DatabaseHelper.dll
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\refint\DatabaseHelper.dll
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\DatabaseHelper.pdb
+D:\Mashup\DatabaseHelper\obj\Debug\net8.0\ref\DatabaseHelper.dll
