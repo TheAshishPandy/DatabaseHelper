@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\Mashup\\DatabaseHelper\\DatabaseHelper.csproj": {
-      "version": "1.0.0",
+      "version": "1.1.0",
       "restore": {
         "projectUniqueName": "D:\\Mashup\\DatabaseHelper\\DatabaseHelper.csproj",
         "projectName": "DatabaseHelper",
@@ -27,6 +27,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Users\\AshishPandey\\Desktop\\LocalNuget": {},
           "https://api.nuget.org/v3/index.json": {},
           "https://pkgs.dev.azure.com/acidaes/_packaging/acidaes/nuget/v3/index.json": {}
         },
@@ -64,6 +65,10 @@
               "target": "Package",
               "version": "[9.0.6, )"
             },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.14.1, )"
+            },
             "Npgsql": {
               "target": "Package",
               "version": "[9.0.3, )"
@@ -71,6 +76,20 @@
             "Oracle.ManagedDataAccess.Core": {
               "target": "Package",
               "version": "[23.9.0, )"
+            },
+            "System.Data.Common": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.9.3, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.1, )"
             }
           },
           "imports": [

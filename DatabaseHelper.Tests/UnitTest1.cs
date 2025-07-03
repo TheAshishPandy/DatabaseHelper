@@ -1,5 +1,6 @@
-﻿namespace DatabaseHelper.Tests;
+﻿using Xunit;
 
+namespace DatabaseHelper.Tests;
 public class UnitTest1
 {
     [Fact]
