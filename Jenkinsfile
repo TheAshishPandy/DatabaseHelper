@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    environment {
+        NUGET_API_KEY = credentials('oy2fg26havczlvbqf7dqy7dbsv4iin7elncnrmnixyrlp4')
+    }
+
+    stages {
+        stage('Versioning') {
+            steps {
+                bat 'gitversion /output json /showvariable NuGetVersionV2 > version.txt'
+                script {
+                    env.NUGET_VERSION = readFile('version.txt').trim()
+                    echo "Using version: ${env.NUGET_VERSION}"
+                }
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                bat 'dotnet restore'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat "dotnet build --configuration Release /p:Version=${env.NUGET_VERSION}"
+            }
+        }
+
+        stage('Pack') {
+            steps {
+                bat "dotnet pack --configuration Release --output ./nupkgs /p:Version=${env.NUGET_VERSION}"
+            }
+        }
+
+        stage('Publish to NuGet') {
+            steps {
+                bat """
+                dotnet nuget push ./nupkgs/*.nupkg ^
+                --api-key %NUGET_API_KEY% ^
+                --source https://api.nuget.org/v3/index.json ^
+                --skip-duplicate
+                """
+            }
+        }
+    }
+}
+
