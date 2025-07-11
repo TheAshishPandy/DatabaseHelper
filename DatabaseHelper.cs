@@ -402,6 +402,218 @@ namespace DatabaseHelper
 
         #endregion
 
+        #region Async Execute Methods
+
+        public static async Task<int> ExecuteNonQueryAsync(string connectionString, CommandType commandType,
+            string commandText, params DbParameter[] commandParameters)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+                throw new ArgumentNullException(nameof(connectionString));
+
+            using var connection = _factory.CreateConnection();
+            connection.ConnectionString = connectionString;
+            return await ExecuteNonQueryAsync(connection, commandType, commandText, commandParameters);
+        }
+
+        public static async Task<int> ExecuteNonQueryAsync(DbConnection connection, CommandType commandType,
+            string commandText, params DbParameter[] commandParameters)
+        {
+            if (connection == null) throw new ArgumentNullException(nameof(connection));
+
+            var cmd = CreateCommand();
+            bool mustCloseConnection = false;
+
+            try
+            {
+                PrepareCommand(cmd, connection, null, commandType, commandText,
+                    commandParameters, out mustCloseConnection);
+
+                int result = await cmd.ExecuteNonQueryAsync();
+                cmd.Parameters.Clear();
+                return result;
+            }
+            finally
+            {
+                if (mustCloseConnection)
+                    await connection.CloseAsync();
+            }
+        }
+
+        public static async Task<DataSet> ExecuteDatasetAsync(string connectionString, CommandType commandType,
+            string commandText, params DbParameter[] commandParameters)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+                throw new ArgumentNullException(nameof(connectionString));
+
+            using var connection = _factory.CreateConnection();
+            connection.ConnectionString = connectionString;
+            return await ExecuteDatasetAsync(connection, commandType, commandText, commandParameters);
+        }
+
+        public static async Task<DataSet> ExecuteDatasetAsync(DbConnection connection, CommandType commandType,
+            string commandText, params DbParameter[] commandParameters)
+        {
+            if (connection == null) throw new ArgumentNullException(nameof(connection));
+
+            var cmd = CreateCommand();
+            bool mustCloseConnection = false;
+
+            try
+            {
+                PrepareCommand(cmd, connection, null, commandType, commandText,
+                    commandParameters, out mustCloseConnection);
+
+                using var adapter = CreateDataAdapter(cmd);
+                var dataset = new DataSet();
+                await Task.Run(() => adapter.Fill(dataset));
+                cmd.Parameters.Clear();
+                return dataset;
+            }
+            finally
+            {
+                if (mustCloseConnection)
+                    await connection.CloseAsync();
+            }
+        }
+
+        public static async Task<DbDataReader> ExecuteReaderAsync(string connectionString, CommandType commandType,
+            string commandText, params DbParameter[] commandParameters)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+                throw new ArgumentNullException(nameof(connectionString));
+
+            var connection = _factory.CreateConnection();
+            connection.ConnectionString = connectionString;
+
+            try
+            {
+                await connection.OpenAsync();
+                return await ExecuteReaderAsync(connection, null, commandType, commandText,
+                    commandParameters, DbConnectionOwnership.Internal);
+            }
+            catch
+            {
+                await connection.CloseAsync();
+                throw;
+            }
+        }
+
+        private static async Task<DbDataReader> ExecuteReaderAsync(DbConnection connection, DbTransaction transaction,
+            CommandType commandType, string commandText, DbParameter[] commandParameters,
+            DbConnectionOwnership connectionOwnership)
+        {
+            if (connection == null) throw new ArgumentNullException(nameof(connection));
+
+            var cmd = CreateCommand();
+            bool mustCloseConnection = false;
+
+            try
+            {
+                PrepareCommand(cmd, connection, transaction, commandType,
+                    commandText, commandParameters, out mustCloseConnection);
+
+                return connectionOwnership == DbConnectionOwnership.External
+                    ? await cmd.ExecuteReaderAsync()
+                    : await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+            }
+            catch
+            {
+                if (mustCloseConnection)
+                    await connection.CloseAsync();
+                throw;
+            }
+        }
+
+        public static async Task<object> ExecuteScalarAsync(string connectionString, CommandType commandType,
+            string commandText, params DbParameter[] commandParameters)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+                throw new ArgumentNullException(nameof(connectionString));
+
+            using var connection = _factory.CreateConnection();
+            connection.ConnectionString = connectionString;
+            return await ExecuteScalarAsync(connection, commandType, commandText, commandParameters);
+        }
+
+        public static async Task<object> ExecuteScalarAsync(DbConnection connection, CommandType commandType,
+            string commandText, params DbParameter[] commandParameters)
+        {
+            if (connection == null) throw new ArgumentNullException(nameof(connection));
+
+            var cmd = CreateCommand();
+            bool mustCloseConnection = false;
+
+            try
+            {
+                PrepareCommand(cmd, connection, null, commandType, commandText,
+                    commandParameters, out mustCloseConnection);
+
+                object result = await cmd.ExecuteScalarAsync();
+                cmd.Parameters.Clear();
+                return result;
+            }
+            finally
+            {
+                if (mustCloseConnection)
+                    await connection.CloseAsync();
+            }
+        }
+
+        #endregion
+
+        #region Transaction Support
+
+        public static async Task<DbTransaction> BeginTransactionAsync(string connectionString, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+                throw new ArgumentNullException(nameof(connectionString));
+
+            var connection = _factory.CreateConnection();
+            connection.ConnectionString = connectionString;
+            await connection.OpenAsync();
+            return await connection.BeginTransactionAsync(isolationLevel);
+        }
+
+        public static async Task CommitTransactionAsync(DbTransaction transaction)
+        {
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
+
+            await transaction.CommitAsync();
+            await transaction.Connection.CloseAsync();
+        }
+
+        public static async Task RollbackTransactionAsync(DbTransaction transaction)
+        {
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
+
+            await transaction.RollbackAsync();
+            await transaction.Connection.CloseAsync();
+        }
+
+        #endregion
+
+        #region Bulk Operations (SQL Server specific)
+
+        public static async Task BulkInsertAsync(string connectionString, string tableName, DataTable dataTable)
+        {
+            if (_currentDatabaseType != DatabaseType.SqlServer)
+                throw new NotSupportedException("BulkInsert is only supported for SQL Server");
+
+            using var connection = new SqlConnection(connectionString);
+            using var bulkCopy = new SqlBulkCopy(connection);
+
+            bulkCopy.DestinationTableName = tableName;
+            bulkCopy.BatchSize = 1000;
+            bulkCopy.BulkCopyTimeout = QueryTimeout;
+
+            await connection.OpenAsync();
+            await bulkCopy.WriteToServerAsync(dataTable);
+        }
+
+        #endregion
+
         #region Database-Specific Helpers
 
         private static DbDataAdapter CreateDataAdapter(DbCommand command)

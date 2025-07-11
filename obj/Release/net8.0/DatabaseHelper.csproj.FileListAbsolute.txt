@@ -147,6 +147,7 @@ D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.GeneratedMSBuildEdito
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.AssemblyInfoInputs.cache
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.AssemblyInfo.cs
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.csproj.CoreCompileInputs.cache
+D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.sourcelink.json
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\Database.9D701ADE.Up2Date
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.dll
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\refint\DatabaseHelper.dll
