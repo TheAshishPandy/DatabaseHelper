@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        NUGET_API_KEY = credentials('oy2fg26havczlvbqf7dqy7dbsv4iin7elncnrmnixyrlp4')
-    }
+    NUGET_API_KEY = credentials('nuget-key')  // Use Jenkins credential
+}
 
     stages {
         stage('Versioning') {
