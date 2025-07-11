@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-    NUGET_API_KEY = credentials('nuget-key')  // Use Jenkins credential
-}
+        NUGET_API_KEY = credentials('nuget-key')  // Use Jenkins credential
+    }
 
     stages {
         stage('Versioning') {
             steps {
-                bat 'gitversion /output json /showvariable NuGetVersionV2 > version.txt'
+                bat 'gitversion /output json /showvariable FullSemVer > version.txt'
                 script {
                     env.NUGET_VERSION = readFile('version.txt').trim()
                     echo "Using version: ${env.NUGET_VERSION}"
@@ -46,4 +46,3 @@ pipeline {
         }
     }
 }
-
