@@ -15,7 +15,7 @@ pipeline {
                     // Parse the version from JSON
                     def gitVersionJson = readFile('gitversion.json')
                     def gitVersion = new groovy.json.JsonSlurper().parseText(gitVersionJson)
-                    env.NUGET_VERSION = gitVersion.FullSemVer
+                    env.NUGET_VERSION = gitVersion.NuGetVersionV2  // Using NuGet-compatible version format
                     echo "📌 Using NuGet Version: ${env.NUGET_VERSION}"
                 }
             }
@@ -29,13 +29,20 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat "dotnet build --configuration Release /p:Version=${env.NUGET_VERSION}"
+                bat "dotnet build --configuration Release /p:Version=${env.NUGET_VERSION} /warnaserror"
             }
         }
 
         stage('Pack') {
             steps {
-                bat "dotnet pack --configuration Release --output ./nupkgs /p:PackageVersion=${env.NUGET_VERSION}"
+                bat """
+                    dotnet pack --configuration Release ^
+                    --output ./nupkgs ^
+                    /p:PackageVersion=${env.NUGET_VERSION} ^
+                    /p:NoBuild=true ^
+                    /p:IncludeSymbols=true ^
+                    /p:SymbolPackageFormat=snupkg
+                """
             }
         }
 
@@ -43,20 +50,27 @@ pipeline {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     script {
-                        def nupkgFiles = findFiles(glob: 'nupkgs/*.nupkg')
-                        if (nupkgFiles.size() == 0) {
+                        // Secure way to find files without Pipeline Utility Steps plugin
+                        def nupkgFiles = bat(script: '@dir /b nupkgs\\*.nupkg', returnStdout: true).trim().split('\r\n')
+                        
+                        if (nupkgFiles.size() == 0 || nupkgFiles[0].isEmpty()) {
                             error "❌ No .nupkg files found in 'nupkgs' folder."
                         }
 
                         for (file in nupkgFiles) {
-                            echo "📦 Uploading ${file.name}..."
-                            bat """
-                                dotnet nuget push "${file.path}" ^
-                                    --api-key ${env.NUGET_API_KEY} ^
+                            def fullPath = "nupkgs\\${file}"
+                            echo "📦 Uploading ${file}..."
+                            
+                            // Secure credential handling
+                            withCredentials([string(credentialsId: 'nuget-key', variable: 'SECURE_NUGET_API_KEY']) {
+                                bat """
+                                    dotnet nuget push "${fullPath}" ^
+                                    --api-key "%SECURE_NUGET_API_KEY%" ^
                                     --source https://api.nuget.org/v3/index.json ^
                                     --skip-duplicate
-                            """
-                            echo "✅ Successfully uploaded: ${file.name}"
+                                """
+                            }
+                            echo "✅ Successfully uploaded: ${file}"
                         }
 
                         echo "🎉 All NuGet package(s) uploaded successfully!"
@@ -69,12 +83,19 @@ pipeline {
     post {
         failure {
             echo "❌ Build failed. Check the logs for details."
+            archiveArtifacts artifacts: '**/bin/**/*.dll,**/bin/**/*.pdb', allowEmptyArchive: true
         }
         unstable {
             echo "⚠️ Build marked as UNSTABLE. Some NuGet uploads may have failed."
+            archiveArtifacts artifacts: 'nupkgs/*.nupkg', allowEmptyArchive: true
         }
         success {
             echo "✅ Jenkins pipeline completed successfully!"
+            archiveArtifacts artifacts: 'nupkgs/*.nupkg,nupkgs/*.snupkg', allowEmptyArchive: true
+        }
+        always {
+            // Clean up workspace
+            cleanWs()
         }
     }
 }
