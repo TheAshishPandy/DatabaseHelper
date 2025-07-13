@@ -53,7 +53,7 @@ pipeline {
                             error "❌ No .nupkg files found in 'nupkgs' folder."
                         }
 
-                        withCredentials([string(credentialsId: 'nuget-key', variable: 'SECURE_NUGET_API_KEY']) {
+                        withCredentials([[$class: 'StringBinding', credentialsId: 'nuget-key', variable: 'SECURE_NUGET_API_KEY']]) {
                             for (file in nupkgFiles) {
                                 def fullPath = "nupkgs\\${file}"
                                 echo "📦 Uploading ${file}..."
