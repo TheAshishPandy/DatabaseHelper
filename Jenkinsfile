@@ -8,14 +8,11 @@ pipeline {
     stages {
         stage('Generate Version') {
             steps {
-                // Generate GitVersion output as JSON
                 bat 'gitversion /output json > gitversion.json'
-
                 script {
-                    // Parse the version from JSON
                     def gitVersionJson = readFile('gitversion.json')
                     def gitVersion = new groovy.json.JsonSlurper().parseText(gitVersionJson)
-                    env.NUGET_VERSION = gitVersion.NuGetVersionV2  // Using NuGet-compatible version format
+                    env.NUGET_VERSION = gitVersion.NuGetVersionV2
                     echo "📌 Using NuGet Version: ${env.NUGET_VERSION}"
                 }
             }
@@ -50,27 +47,25 @@ pipeline {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     script {
-                        // Secure way to find files without Pipeline Utility Steps plugin
                         def nupkgFiles = bat(script: '@dir /b nupkgs\\*.nupkg', returnStdout: true).trim().split('\r\n')
                         
                         if (nupkgFiles.size() == 0 || nupkgFiles[0].isEmpty()) {
                             error "❌ No .nupkg files found in 'nupkgs' folder."
                         }
 
-                        for (file in nupkgFiles) {
-                            def fullPath = "nupkgs\\${file}"
-                            echo "📦 Uploading ${file}..."
-                            
-                            // Secure credential handling
-                            withCredentials([string(credentialsId: 'nuget-key', variable: 'SECURE_NUGET_API_KEY']) {
+                        withCredentials([string(credentialsId: 'nuget-key', variable: 'SECURE_NUGET_API_KEY']) {
+                            for (file in nupkgFiles) {
+                                def fullPath = "nupkgs\\${file}"
+                                echo "📦 Uploading ${file}..."
+                                
                                 bat """
                                     dotnet nuget push "${fullPath}" ^
                                     --api-key "%SECURE_NUGET_API_KEY%" ^
                                     --source https://api.nuget.org/v3/index.json ^
                                     --skip-duplicate
                                 """
+                                echo "✅ Successfully uploaded: ${file}"
                             }
-                            echo "✅ Successfully uploaded: ${file}"
                         }
 
                         echo "🎉 All NuGet package(s) uploaded successfully!"
@@ -94,7 +89,6 @@ pipeline {
             archiveArtifacts artifacts: 'nupkgs/*.nupkg,nupkgs/*.snupkg', allowEmptyArchive: true
         }
         always {
-            // Clean up workspace
             cleanWs()
         }
     }
