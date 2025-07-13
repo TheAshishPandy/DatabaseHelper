@@ -2,17 +2,24 @@ pipeline {
     agent any
 
     environment {
-        NUGET_API_KEY = credentials('nuget-key') // Jenkins credential ID
+        NUGET_API_KEY = credentials('nuget-key')
     }
 
     stages {
         stage('Generate Version') {
             steps {
-                bat 'gitversion /output json > gitversion.json'
                 script {
-                    def gitVersionJson = readFile('gitversion.json')
-                    def gitVersion = new groovy.json.JsonSlurper().parseText(gitVersionJson)
-                    env.NUGET_VERSION = gitVersion.NuGetVersionV2
+                    // First try to get version from GitVersion
+                    def version = "1.0.0" // Default fallback version
+                    try {
+                        bat 'gitversion /output json > gitversion.json'
+                        def gitVersionJson = readFile('gitversion.json')
+                        def gitVersion = new groovy.json.JsonSlurper().parseText(gitVersionJson)
+                        version = gitVersion.NuGetVersionV2 ?: version
+                    } catch (Exception e) {
+                        echo "⚠️ Could not determine version from GitVersion, using fallback: ${version}"
+                    }
+                    env.NUGET_VERSION = version
                     echo "📌 Using NuGet Version: ${env.NUGET_VERSION}"
                 }
             }
@@ -26,7 +33,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat "dotnet build --configuration Release /p:Version=${env.NUGET_VERSION} /warnaserror"
+                script {
+                    // First build without warnaserror to identify null reference issues
+                    bat "dotnet build --configuration Release /p:Version=${env.NUGET_VERSION}"
+                    
+                    // Then build with warnaserror if first build succeeds
+                    bat "dotnet build --configuration Release /p:Version=${env.NUGET_VERSION} /warnaserror"
+                }
             }
         }
 
@@ -53,7 +66,7 @@ pipeline {
                             error "❌ No .nupkg files found in 'nupkgs' folder."
                         }
 
-                        withCredentials([[$class: 'StringBinding', credentialsId: 'nuget-key', variable: 'SECURE_NUGET_API_KEY']]) {
+                        withCredentials([string(credentialsId: 'nuget-key', variable: 'SECURE_NUGET_API_KEY')]) {
                             for (file in nupkgFiles) {
                                 def fullPath = "nupkgs\\${file}"
                                 echo "📦 Uploading ${file}..."
@@ -67,8 +80,6 @@ pipeline {
                                 echo "✅ Successfully uploaded: ${file}"
                             }
                         }
-
-                        echo "🎉 All NuGet package(s) uploaded successfully!"
                     }
                 }
             }
