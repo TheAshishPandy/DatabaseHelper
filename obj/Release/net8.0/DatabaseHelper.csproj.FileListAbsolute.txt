@@ -144,8 +144,6 @@ D:\Mashup\DatabaseHelper\bin\Release\net8.0\runtimes\win\lib\net8.0\System.Direc
 D:\Mashup\DatabaseHelper\bin\Release\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.csproj.AssemblyReference.cache
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.GeneratedMSBuildEditorConfig.editorconfig
-D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.AssemblyInfoInputs.cache
-D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.AssemblyInfo.cs
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.csproj.CoreCompileInputs.cache
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\DatabaseHelper.sourcelink.json
 D:\Mashup\DatabaseHelper\obj\Release\net8.0\Database.9D701ADE.Up2Date
