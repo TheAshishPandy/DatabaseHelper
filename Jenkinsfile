@@ -34,15 +34,17 @@ pipeline {
             }
         }
 
-        stage('Publish to NuGet') {
-            steps {
-                bat """
-                dotnet nuget push ./nupkgs/*.nupkg ^
-                --api-key %NUGET_API_KEY% ^
-                --source https://api.nuget.org/v3/index.json ^
-                --skip-duplicate
-                """
-            }
+       stage('Publish to NuGet') {
+    steps {
+        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+            bat """
+                dotnet nuget push "C:/ProgramData/Jenkins/.jenkins/workspace/DatabaseHelper-Build/nupkgs/*.nupkg" ^
+                    --api-key ${env.NUGET_API_KEY} ^
+                    --source https://api.nuget.org/v3/index.json ^
+                    --skip-duplicate
+            """
         }
+    }
+}
     }
 }
