@@ -1,45 +1,63 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-<PropertyGroup>
-  <TargetFramework>net8.0</TargetFramework>
-  <ImplicitUsings>enable</ImplicitUsings>
-  <Nullable>enable</Nullable>
-  <IsPackable>true</IsPackable>
-  <PackageOutputPath>./nupkg</PackageOutputPath>
-  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  <!-- Packaging properties -->
-  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  <GenerateRuntimeConfigurationFiles>false</GenerateRuntimeConfigurationFiles>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    
+    <!-- Packaging properties -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild> <!-- Changed to false for better CI control -->
+    <GenerateRuntimeConfigurationFiles>false</GenerateRuntimeConfigurationFiles>
 
-  <!-- 🟢 Only ONE PackageId -->
-  <PackageId>theashishpandy.DatabaseHelper</PackageId>
+    <!-- Package Identification -->
+    <PackageId>theashishpandy.DatabaseHelper</PackageId>
+    <Version>1.1.3</Version> <!-- Consider using GitVersion for automatic versioning -->
+    <AssemblyVersion>1.1.3.0</AssemblyVersion>
+    <FileVersion>1.1.3.0</FileVersion>
+    <PackageVersion>1.1.3</PackageVersion>
 
-  <Version>1.1.3</Version>
-  <AssemblyVersion>1.1.3.0</AssemblyVersion>
-  <FileVersion>1.1.3.0</FileVersion>
-  <PackageVersion>1.1.3</PackageVersion>
-
-  <Authors>Ashish</Authors>
-  <Company>Marvik</Company>
-  <Description>A cross-database helper library for SQL Server, Oracle, and PostgreSQL</Description>
-  <PackageTags>database sql oracle postgresql helper</PackageTags>
-  <PackageProjectUrl>https://github.com/theashishpandy/DatabaseHelper</PackageProjectUrl>
-  <RepositoryUrl>https://github.com/theashishpandy/DatabaseHelper.git</RepositoryUrl>
-</PropertyGroup>
-
+    <!-- Package Metadata -->
+    <Authors>Ashish</Authors>
+    <Company>Marvik</Company>
+    <Description>A cross-database helper library for SQL Server, Oracle, and PostgreSQL</Description>
+    <PackageTags>database sql oracle postgresql helper</PackageTags>
+    <PackageProjectUrl>https://github.com/theashishpandy/DatabaseHelper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/theashishpandy/DatabaseHelper.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
+    <!-- Added important package metadata -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression> <!-- Or use PackageLicenseFile -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon> <!-- Optional but recommended -->
+  </PropertyGroup>
 
   <ItemGroup>
+    <!-- Main Dependencies -->
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.6" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.9.0" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+
+    <!-- Test Dependencies (should be in a separate test project) -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" PrivateAssets="all" />
+    <PackageReference Include="xunit" Version="2.9.3" PrivateAssets="all" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Include additional files in package -->
+    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+    <None Include="..\README.md" Pack="true" PackagePath=""/>
+    <None Include="..\icon.png" Pack="true" PackagePath=""/> <!-- Optional -->
+  </ItemGroup>
+
+  <!-- Exclude test files from package -->
+  <ItemGroup>
+    <Compile Remove="**\*.Tests.cs" />
+    <None Remove="**\*.Tests.cs" />
+  </ItemGroup>
 </Project>
