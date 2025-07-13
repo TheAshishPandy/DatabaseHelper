@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        NUGET_API_KEY = credentials('nuget-key')  // Use Jenkins credential
+        NUGET_API_KEY = credentials('nuget-key')
     }
 
     stages {
@@ -37,21 +37,14 @@ pipeline {
         stage('Publish to NuGet') {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    script {
-                        // Find the first .nupkg file in the nupkgs directory
-                        def nupkgFiles = findFiles(glob: 'nupkgs/*.nupkg')
-                        if (nupkgFiles) {
-                            def nupkgPath = nupkgFiles[0].path.replace('\\', '/')
-                            bat """
-                                dotnet nuget push "${nupkgPath}" ^
-                                    --api-key ${env.NUGET_API_KEY} ^
-                                    --source https://api.nuget.org/v3/index.json ^
-                                    --skip-duplicate
-                            """
-                        } else {
-                            error "No .nupkg files found in nupkgs directory"
-                        }
-                    }
+                    bat """
+                        for %%f in ("nupkgs\\*.nupkg") do (
+                            dotnet nuget push "%%f" ^
+                                --api-key %NUGET_API_KEY% ^
+                                --source https://api.nuget.org/v3/index.json ^
+                                --skip-duplicate
+                        )
+                    """
                 }
             }
         }
