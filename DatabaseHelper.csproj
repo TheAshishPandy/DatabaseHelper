@@ -8,12 +8,12 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     
     <!-- Packaging properties -->
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild> <!-- Changed to false for better CI control -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateRuntimeConfigurationFiles>false</GenerateRuntimeConfigurationFiles>
 
     <!-- Package Identification -->
     <PackageId>theashishpandy.DatabaseHelper</PackageId>
-    <Version>1.1.3</Version> <!-- Consider using GitVersion for automatic versioning -->
+    <Version>1.1.3</Version>
     <AssemblyVersion>1.1.3.0</AssemblyVersion>
     <FileVersion>1.1.3.0</FileVersion>
     <PackageVersion>1.1.3</PackageVersion>
@@ -27,10 +27,10 @@
     <RepositoryUrl>https://github.com/theashishpandy/DatabaseHelper.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     
-    <!-- Added important package metadata -->
-    <PackageLicenseExpression>MIT</PackageLicenseExpression> <!-- Or use PackageLicenseFile -->
+    <!-- License configuration -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>icon.png</PackageIcon> <!-- Optional but recommended -->
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,17 +42,17 @@
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.9.0" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
 
-    <!-- Test Dependencies (should be in a separate test project) -->
+    <!-- Test Dependencies -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" PrivateAssets="all" />
     <PackageReference Include="xunit" Version="2.9.3" PrivateAssets="all" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Include additional files in package -->
-    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
-    <None Include="..\README.md" Pack="true" PackagePath=""/>
-    <None Include="..\icon.png" Pack="true" PackagePath=""/> <!-- Optional -->
+    <!-- Include files from PROJECT ROOT -->
+    <None Include="LICENSE" Pack="true" PackagePath=""/>
+    <None Include="README.md" Pack="true" PackagePath=""/>
+    <None Include="icon.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 
   <!-- Exclude test files from package -->
