@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "DatabaseHelper/1.1.1": {
+      "DatabaseHelper/1.1.3": {
         "dependencies": {
           "Microsoft.Data.SqlClient": "6.0.2",
           "Microsoft.Extensions.DependencyInjection": "9.0.6",
@@ -957,7 +957,7 @@
     }
   },
   "libraries": {
-    "DatabaseHelper/1.1.1": {
+    "DatabaseHelper/1.1.3": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -1196,7 +1196,7 @@
     "System.Collections/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-3Dcj85/TBdVpL5Zr+gEEBUuFe2icOnLalmEh9hfck1PTYbbyWuZgh4fmm2ysCLTrqLQw6t3TgTyJ+VLp+Qb+Lw==",
+      "sha512": "sha512-BLE/typy4wF/VLxtVaQoYOtqCbudy3udzQ25OrukEdeBvEj5Lgubg41WK35BQxFQasdZ1LSTt9NBQQ7Z24wXsg==",
       "path": "system.collections/4.3.0",
       "hashPath": "system.collections.4.3.0.nupkg.sha512"
     },
@@ -1259,7 +1259,7 @@
     "System.Globalization/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-kYdVd2f2PAdFGblzFswE4hkNANJBKRmsfa2X5LG2AcWE1c7/4t0pYae1L8vfZ5xvE2nK/R9JprtToA61OSHWIg==",
+      "sha512": "sha512-76oFWTfqth/S9PgSpau10CdJaHIluTBmjDY6VIE4FkRBfRCBcdSRij/Y9ucfAVkyuN265ypuJLPAgqNFIUJNSg==",
       "path": "system.globalization/4.3.0",
       "hashPath": "system.globalization.4.3.0.nupkg.sha512"
     },
@@ -1273,7 +1273,7 @@
     "System.IO/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-3qjaHvxQPDpSOYICjUoTsmoq5u6QJAFRUITgeT/4gqkF1bajbSmb1kwSxEA8AHlofqgcKJcM8udgieRNhaJ5Cg==",
+      "sha512": "sha512-t9rW1J49TyVoOmrLiveqnMUQ056qCs0hQbJdeSaTtyB4Hr7wVJYZtQeK9LKuEEkmr3lmCYPhI7bhdFEuMEAmHg==",
       "path": "system.io/4.3.0",
       "hashPath": "system.io.4.3.0.nupkg.sha512"
     },
@@ -1301,7 +1301,7 @@
     "System.Reflection/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KMiAFoW7MfJGa9nDFNcfu+FpEdiHpWgTcS2HdMpDvt9saK3y/G4GwprPyzqjFH9NTaGPQeWNHU+iDlDILj96aQ==",
+      "sha512": "sha512-dDAniTTqaMy9LHvt4bDGFuFy//1zqrMjic8JZhnKH6eBX/KrUXduVjC0kcYBKleyF2dwes0UFaRAhD3VihMFjg==",
       "path": "system.reflection/4.3.0",
       "hashPath": "system.reflection.4.3.0.nupkg.sha512"
     },
@@ -1315,14 +1315,14 @@
     "System.Reflection.Primitives/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-5RXItQz5As4xN2/YUDxdpsEkMhvw3e6aNveFXUn4Hl/udNTCNhnKp8lT9fnc3MhvGKh1baak5CovpuQUXHAlIA==",
+      "sha512": "sha512-5eq8h61I+Ms8moXKa0ZgNTI7b40XPHuEOIEhawQ7jklf5fgwh9CsZSjK9p1yIe8o2PaKjq6xF9RJooOPpiAMSQ==",
       "path": "system.reflection.primitives/4.3.0",
       "hashPath": "system.reflection.primitives.4.3.0.nupkg.sha512"
     },
     "System.Resources.ResourceManager/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-/zrcPkkWdZmI4F92gL/TPumP98AVDu/Wxr3CSJGQQ+XN6wbRZcyfSKVoPo17ilb3iOr0cCRqJInGwNMolqhS8A==",
+      "sha512": "sha512-nTESga+XEG03UoOhUm01NW4a5KaKV3BtmRO+tSflvGuoDTyhuDaRxvFygWp+3vzy+sX5dM65ZEkFJGRR6b5zdw==",
       "path": "system.resources.resourcemanager/4.3.0",
       "hashPath": "system.resources.resourcemanager.4.3.0.nupkg.sha512"
     },
@@ -1357,7 +1357,7 @@
     "System.Text.Encoding/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-BiIg+KWaSDOITze6jGQynxg64naAPtqGHBwDrLaCtixsa5bKiR8dpPOHA7ge3C0JJQizJE+sfkz1wV+BAKAYZw==",
+      "sha512": "sha512-uBIQuAJGtbZXIhxbPdWnxcznvYHVrbYT+RzWGCxsr3p06mN93WsY9upMW/NgS/6lIdv2X5xKgLkaKYa+aTcTpg==",
       "path": "system.text.encoding/4.3.0",
       "hashPath": "system.text.encoding.4.3.0.nupkg.sha512"
     },
@@ -1385,7 +1385,7 @@
     "System.Threading.Tasks/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-LbSxKEdOUhVe8BezB/9uOGGppt+nZf6e1VFyw6v3DN6lqitm0OSn2uXMOdtP0M3W4iMcqcivm2J6UgqiwwnXiA==",
+      "sha512": "sha512-itu7+Yv8F3wO/foPpsD4pXQBIrtnWdWoYnvwWTPkiAIGhK7KSeZN68B6eI9v8FJhWC7tpsvLYgMRnzMDdhsPUQ==",
       "path": "system.threading.tasks/4.3.0",
       "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
     },
