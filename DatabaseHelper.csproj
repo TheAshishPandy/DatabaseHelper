@@ -6,9 +6,6 @@
   <IsPackable>true</IsPackable>
   <PackageOutputPath>./nupkg</PackageOutputPath>
   <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-
- <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   <!-- Packaging properties -->
   <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   <GenerateRuntimeConfigurationFiles>false</GenerateRuntimeConfigurationFiles>
@@ -43,8 +40,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-	 <None Include="LICENSE" Pack="true" PackagePath=""/>
-    <None Include="README.md" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>
